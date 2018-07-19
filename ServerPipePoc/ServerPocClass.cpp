@@ -140,12 +140,19 @@ int ServerPocClass::treatClient()
 }
 
 
-
 VOID getAnswerToRequest(LPTSTR pchRequest, LPTSTR pchReply, LPDWORD pchBytes)
 {
 	_tprintf(TEXT("Client Request String:\"%s\"\n"), pchRequest);	
 
-	if (FAILED(StringCchCopy(pchReply, BUFSIZE, TEXT("default answer from server"))))
+	// we will get a string which represents a number from the client
+	// we must convert to a numerical type and double it.
+	int numberToDouble = _tstoi(pchRequest);
+	numberToDouble *= 2;
+	std::wstring numStr = std::to_wstring(numberToDouble);
+	TCHAR buf[BUFSIZE];
+
+	swprintf_s(buf, BUFSIZE, TEXT("server : %d"), numberToDouble);
+	if (FAILED(StringCchCopy(pchReply, BUFSIZE, buf)))
 	{
 		*pchBytes = 0;
 		pchReply[0] = 0;

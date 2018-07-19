@@ -7,6 +7,7 @@
 #include <iostream>
 #include <tchar.h>
 #include <strsafe.h>
+#include <string>
 
 #define CONNECTING_STATE 0 
 #define READING_STATE 1 
@@ -29,13 +30,18 @@ typedef struct
 
 class ServerPocClass
 {
-public:
+private:
+	short int noInstances;
+	DWORD dwWait;
+	DWORD cbRet;
+	DWORD dwErr;
+	DWORD dwThreadId;
+	bool isSuccess;
+	HANDLE hPipe;
+	HANDLE hThread;
+	std::string pipeNameStr;
+	BOOL fConnected;
 
-	ServerPocClass(std::string pipeName, short int noInstances);
-	virtual ~ServerPocClass();
-
-	// create the main Server Thread:
-	void createMainServerThread();
 protected:
 
 	// create instances of a named pipe
@@ -51,17 +57,13 @@ protected:
 	int treatClient();
 
 
-private:
-	short int noInstances;
-	DWORD dwWait;
-	DWORD cbRet;
-	DWORD dwErr;
-	DWORD dwThreadId;
-	bool isSuccess;
-	HANDLE hPipe;
-	HANDLE hThread;
-	std::string pipeNameStr;
-	BOOL fConnected;
+public:
+
+	ServerPocClass(std::string pipeName, short int noInstances);
+	virtual ~ServerPocClass();
+
+	// create the main Server Thread:
+	void createMainServerThread();
 
 };
 #endif /* __SERVER_POC_CLASS_H__ */
